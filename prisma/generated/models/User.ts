@@ -9,8 +9,8 @@
  * 🟢 You can import this file directly.
  */
 import type * as runtime from "@prisma/client/runtime/client"
-import type * as $Enums from "../enums.js"
-import type * as Prisma from "../internal/prismaNamespace.js"
+import type * as $Enums from "../enums"
+import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model User
@@ -291,7 +291,7 @@ export type UserCreateInput = {
   password: string
   role?: $Enums.Role
   createdAt?: Date | string
-  updatedAt: Date | string
+  updatedAt?: Date | string
 }
 
 export type UserUncheckedCreateInput = {
@@ -301,7 +301,7 @@ export type UserUncheckedCreateInput = {
   password: string
   role?: $Enums.Role
   createdAt?: Date | string
-  updatedAt: Date | string
+  updatedAt?: Date | string
 }
 
 export type UserUpdateInput = {
@@ -330,7 +330,7 @@ export type UserCreateManyInput = {
   password: string
   role?: $Enums.Role
   createdAt?: Date | string
-  updatedAt: Date | string
+  updatedAt?: Date | string
 }
 
 export type UserUpdateManyMutationInput = {
