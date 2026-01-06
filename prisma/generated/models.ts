@@ -9,4 +9,10 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User'
+export type * from './models/Business'
+export type * from './models/Service'
+export type * from './models/Amenity'
+export type * from './models/BusinessAmenity'
+export type * from './models/Schedule'
+export type * from './models/Appointment'
 export type * from './commonInputTypes'

@@ -6,7 +6,7 @@ import { Roles } from 'src/common/decorators/roles.decorator';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Roles('ADMIN')
+/*   @Roles('ADMIN') */
   @Get()
   async () {
     return this.usersService.findAllUsers();

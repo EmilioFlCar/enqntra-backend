@@ -42,3 +42,33 @@ export { Prisma }
  * 
  */
 export type User = Prisma.UserModel
+/**
+ * Model Business
+ * 
+ */
+export type Business = Prisma.BusinessModel
+/**
+ * Model Service
+ * 
+ */
+export type Service = Prisma.ServiceModel
+/**
+ * Model Amenity
+ * 
+ */
+export type Amenity = Prisma.AmenityModel
+/**
+ * Model BusinessAmenity
+ * 
+ */
+export type BusinessAmenity = Prisma.BusinessAmenityModel
+/**
+ * Model Schedule
+ * 
+ */
+export type Schedule = Prisma.ScheduleModel
+/**
+ * Model Appointment
+ * 
+ */
+export type Appointment = Prisma.AppointmentModel

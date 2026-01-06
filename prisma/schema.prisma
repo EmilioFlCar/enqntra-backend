@@ -8,17 +8,105 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
-  role      Role     @default(USER)
+  id       String @id @default(uuid()) @db.Uuid
+  name     String
+  email    String @unique
+  password String
+  role     Role   @default(USER)
+
+  businesses   Business[]
+  appointments Appointment[]
+
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  updatedAt DateTime @updatedAt
+}
+
+model Business {
+  id          String  @id @default(uuid()) @db.Uuid
+  name        String
+  description String?
+  address     String?
+  phone       String?
+
+  ownerId String @db.Uuid
+  owner   User   @relation(fields: [ownerId], references: [id])
+
+  services     Service[]
+  amenities    BusinessAmenity[]
+  schedules    Schedule[]
+  appointments Appointment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Service {
+  id          String  @id @default(uuid()) @db.Uuid
+  name        String
+  description String?
+  durationMin Int
+  price       Float?
+
+  businessId   String        @db.Uuid
+  business     Business      @relation(fields: [businessId], references: [id])
+  appointments Appointment[]
+}
+
+model Amenity {
+  id         String            @id @default(uuid()) @db.Uuid
+  name       String            @unique
+  businesses BusinessAmenity[]
+}
+
+model BusinessAmenity {
+  businessId String @db.Uuid
+  amenityId  String @db.Uuid
+
+  business Business @relation(fields: [businessId], references: [id])
+  amenity  Amenity  @relation(fields: [amenityId], references: [id])
+
+  @@id([businessId, amenityId])
+}
+
+model Schedule {
+  id        String @id @default(uuid()) @db.Uuid
+  dayOfWeek Int // 0 = domingo, 6 = sábado
+  openTime  String // "08:00"
+  closeTime String // "18:00"
+
+  businessId String   @db.Uuid
+  business   Business @relation(fields: [businessId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Appointment {
+  id     String            @id @default(uuid()) @db.Uuid
+  date   DateTime
+  status AppointmentStatus @default(PENDING)
+
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id])
+
+  businessId String   @db.Uuid
+  business   Business @relation(fields: [businessId], references: [id])
+
+  serviceId String  @db.Uuid
+  service   Service @relation(fields: [serviceId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum Role {
   ADMIN
   USER
-  OWNER
+  BUSINESS
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
 }

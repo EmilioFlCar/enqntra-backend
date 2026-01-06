@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.0.0",
   "engineVersion": "0c19ccc313cf9911a90d99d2ac2eb0280c76c513",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"./generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id        Int      @id @default(autoincrement())\n  name      String\n  email     String   @unique\n  password  String\n  role      Role     @default(USER)\n  createdAt DateTime @default(now())\n  updatedAt DateTime @default(now()) @updatedAt\n}\n\nenum Role {\n  ADMIN\n  USER\n  OWNER\n}\n",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"./generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id       String @id @default(uuid()) @db.Uuid\n  name     String\n  email    String @unique\n  password String\n  role     Role   @default(USER)\n\n  businesses   Business[]\n  appointments Appointment[]\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel Business {\n  id          String  @id @default(uuid()) @db.Uuid\n  name        String\n  description String?\n  address     String?\n  phone       String?\n\n  ownerId String @db.Uuid\n  owner   User   @relation(fields: [ownerId], references: [id])\n\n  services     Service[]\n  amenities    BusinessAmenity[]\n  schedules    Schedule[]\n  appointments Appointment[]\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel Service {\n  id          String  @id @default(uuid()) @db.Uuid\n  name        String\n  description String?\n  durationMin Int\n  price       Float?\n\n  businessId   String        @db.Uuid\n  business     Business      @relation(fields: [businessId], references: [id])\n  appointments Appointment[]\n}\n\nmodel Amenity {\n  id         String            @id @default(uuid()) @db.Uuid\n  name       String            @unique\n  businesses BusinessAmenity[]\n}\n\nmodel BusinessAmenity {\n  businessId String @db.Uuid\n  amenityId  String @db.Uuid\n\n  business Business @relation(fields: [businessId], references: [id])\n  amenity  Amenity  @relation(fields: [amenityId], references: [id])\n\n  @@id([businessId, amenityId])\n}\n\nmodel Schedule {\n  id        String @id @default(uuid()) @db.Uuid\n  dayOfWeek Int // 0 = domingo, 6 = sábado\n  openTime  String // \"08:00\"\n  closeTime String // \"18:00\"\n\n  businessId String   @db.Uuid\n  business   Business @relation(fields: [businessId], references: [id])\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel Appointment {\n  id     String            @id @default(uuid()) @db.Uuid\n  date   DateTime\n  status AppointmentStatus @default(PENDING)\n\n  userId String @db.Uuid\n  user   User   @relation(fields: [userId], references: [id])\n\n  businessId String   @db.Uuid\n  business   Business @relation(fields: [businessId], references: [id])\n\n  serviceId String  @db.Uuid\n  service   Service @relation(fields: [serviceId], references: [id])\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nenum Role {\n  ADMIN\n  USER\n  BUSINESS\n}\n\nenum AppointmentStatus {\n  PENDING\n  CONFIRMED\n  CANCELLED\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -28,7 +28,7 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"Role\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"Role\"},{\"name\":\"businesses\",\"kind\":\"object\",\"type\":\"Business\",\"relationName\":\"BusinessToUser\"},{\"name\":\"appointments\",\"kind\":\"object\",\"type\":\"Appointment\",\"relationName\":\"AppointmentToUser\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Business\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"address\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ownerId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"owner\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"BusinessToUser\"},{\"name\":\"services\",\"kind\":\"object\",\"type\":\"Service\",\"relationName\":\"BusinessToService\"},{\"name\":\"amenities\",\"kind\":\"object\",\"type\":\"BusinessAmenity\",\"relationName\":\"BusinessToBusinessAmenity\"},{\"name\":\"schedules\",\"kind\":\"object\",\"type\":\"Schedule\",\"relationName\":\"BusinessToSchedule\"},{\"name\":\"appointments\",\"kind\":\"object\",\"type\":\"Appointment\",\"relationName\":\"AppointmentToBusiness\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Service\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"durationMin\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"price\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"businessId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"business\",\"kind\":\"object\",\"type\":\"Business\",\"relationName\":\"BusinessToService\"},{\"name\":\"appointments\",\"kind\":\"object\",\"type\":\"Appointment\",\"relationName\":\"AppointmentToService\"}],\"dbName\":null},\"Amenity\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"businesses\",\"kind\":\"object\",\"type\":\"BusinessAmenity\",\"relationName\":\"AmenityToBusinessAmenity\"}],\"dbName\":null},\"BusinessAmenity\":{\"fields\":[{\"name\":\"businessId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"amenityId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"business\",\"kind\":\"object\",\"type\":\"Business\",\"relationName\":\"BusinessToBusinessAmenity\"},{\"name\":\"amenity\",\"kind\":\"object\",\"type\":\"Amenity\",\"relationName\":\"AmenityToBusinessAmenity\"}],\"dbName\":null},\"Schedule\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"dayOfWeek\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"openTime\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"closeTime\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"businessId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"business\",\"kind\":\"object\",\"type\":\"Business\",\"relationName\":\"BusinessToSchedule\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Appointment\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"date\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"AppointmentStatus\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"AppointmentToUser\"},{\"name\":\"businessId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"business\",\"kind\":\"object\",\"type\":\"Business\",\"relationName\":\"AppointmentToBusiness\"},{\"name\":\"serviceId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"service\",\"kind\":\"object\",\"type\":\"Service\",\"relationName\":\"AppointmentToService\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
   const { Buffer } = await import('node:buffer')
@@ -183,6 +183,66 @@ export interface PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.business`: Exposes CRUD operations for the **Business** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Businesses
+    * const businesses = await prisma.business.findMany()
+    * ```
+    */
+  get business(): Prisma.BusinessDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.service`: Exposes CRUD operations for the **Service** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Services
+    * const services = await prisma.service.findMany()
+    * ```
+    */
+  get service(): Prisma.ServiceDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.amenity`: Exposes CRUD operations for the **Amenity** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Amenities
+    * const amenities = await prisma.amenity.findMany()
+    * ```
+    */
+  get amenity(): Prisma.AmenityDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.businessAmenity`: Exposes CRUD operations for the **BusinessAmenity** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BusinessAmenities
+    * const businessAmenities = await prisma.businessAmenity.findMany()
+    * ```
+    */
+  get businessAmenity(): Prisma.BusinessAmenityDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.schedule`: Exposes CRUD operations for the **Schedule** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Schedules
+    * const schedules = await prisma.schedule.findMany()
+    * ```
+    */
+  get schedule(): Prisma.ScheduleDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.appointment`: Exposes CRUD operations for the **Appointment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Appointments
+    * const appointments = await prisma.appointment.findMany()
+    * ```
+    */
+  get appointment(): Prisma.AppointmentDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {
