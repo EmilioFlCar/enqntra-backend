@@ -3,7 +3,7 @@ import { Role } from 'prisma/generated/enums';
 import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
   findAllUsers() {

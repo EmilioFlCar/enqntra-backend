@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
-import { UsersModule } from './users/users.module.js';
+import { UserModule } from './users/users.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { PrismaService } from './prisma.service.js';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard.js';
 import { RolesGuard } from './common/guards/roles.guard.js';
-import { BusinessModule } from './business/business.module';
-import { ServiceModule } from './service/service.module';
+import { ServiceModule } from './services/services.module.js';
+import { BusinessModule } from './businesses/businesses.module.js';
 
 
 @Module({
-  imports: [UsersModule, AuthModule, BusinessModule, ServiceModule],
+  imports: [UserModule, AuthModule, BusinessModule, ServiceModule],
   providers: [
     PrismaService, 
     {

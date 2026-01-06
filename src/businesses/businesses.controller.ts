@@ -1,16 +1,16 @@
 import { Body, Controller, Get, Param, Post, UnauthorizedException, UseGuards } from '@nestjs/common';
-import { BusinessService } from './business.service';
+import { BusinessService } from './businesses.service';
 import { CreateBusinessDto } from './dto/create-business.dto';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { UserPayload } from 'src/common/types/user-payload';
-import { UsersService } from 'src/users/users.service';
+import { UserService } from 'src/users/users.service';
 
 @Controller('business')
 export class BusinessController {
     constructor(
         private businessService: BusinessService,
-        private UserServive: UsersService,
+        private userService: UserService,
     ) {}
 
     @Get()
@@ -30,7 +30,7 @@ export class BusinessController {
             @CurrentUser()user: UserPayload
         ) {
             const business = await this.businessService.createBusiness(body, user.id);
-            await this.UserServive.promoteUserToBusiness(user.id);
+            await this.userService.promoteUserToBusiness(user.id);
             return business;
 
         }
