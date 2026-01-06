@@ -7,6 +7,7 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard.js';
 import { RolesGuard } from './common/guards/roles.guard.js';
 import { ServiceModule } from './services/services.module.js';
 import { BusinessModule } from './businesses/businesses.module.js';
+import { BusinessOwnerGuard } from './common/guards/business-owner.guard.js';
 
 
 @Module({
@@ -20,6 +21,10 @@ import { BusinessModule } from './businesses/businesses.module.js';
     {
       provide: APP_GUARD,
       useClass: RolesGuard,
+    },
+        {
+      provide: APP_GUARD,
+      useClass: BusinessOwnerGuard,
     },
   ],
 })

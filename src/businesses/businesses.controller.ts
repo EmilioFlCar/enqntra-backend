@@ -6,7 +6,7 @@ import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { UserPayload } from 'src/common/types/user-payload';
 import { UserService } from 'src/users/users.service';
 
-@Controller('business')
+@Controller('businesses')
 export class BusinessController {
     constructor(
         private businessService: BusinessService,
