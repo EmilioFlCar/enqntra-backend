@@ -2,22 +2,25 @@ import { Body, Controller, Delete, Get, Param, Patch, UseGuards } from '@nestjs/
 import { ServiceService } from './services.service';
 import { CreateBusinessServiceDto } from './dto/create-business-service.dto';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
-import { BusinessOwnerGuard } from 'src/common/guards/business-owner.guard';
+import { OwnershipGuard } from 'src/common/guards/ownership.guard';
+import { Ownership } from 'src/common/decorators/ownership.decorator';
 
 @Controller('services')
 @UseGuards(JwtAuthGuard)
 
 export class ServiceController {
-    constructor(private serviceService: ServiceService) {}
+    constructor(
+        private serviceService: ServiceService
+    ) {}
 
     @Get(':id')
     getServicesById(@Param('id') id: string) {
         return this.serviceService.findById(id);
     }
-
     
     @Patch(':id')
-    @UseGuards(BusinessOwnerGuard)
+    @Ownership('service')
+    @UseGuards(OwnershipGuard)
     update(
         @Param('id') id: string, 
         @Body() dto: Partial<CreateBusinessServiceDto>
@@ -26,7 +29,8 @@ export class ServiceController {
     }
 
     @Delete(':id')
-    @UseGuards(BusinessOwnerGuard)
+    @Ownership('service')
+    @UseGuards(OwnershipGuard)
     delete(@Param('id') id: string) {
         return this.serviceService.delete(id);
     }
