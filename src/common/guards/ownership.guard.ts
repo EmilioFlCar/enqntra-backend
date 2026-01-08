@@ -16,13 +16,12 @@ export class OwnershipGuard implements CanActivate {
 
         const request = context.switchToHttp().getRequest();
         const userId = request.user.id;
-        const businessId = request.params.id;
 
         let ownerId: string | null = null;
 
         if (resource === 'business') {
             const business = await this.prisma.business.findUnique({
-                where: { id: businessId },
+                where: { id: request.params.businessId },
             });
 
             if(!business) throw new NotFoundException('Resource not found');
@@ -32,7 +31,7 @@ export class OwnershipGuard implements CanActivate {
 
         if (resource === 'service') {
             const service = await this.prisma.service.findUnique({
-                where: { id: businessId },
+                where: { id: request.params.id },
                 select: {
                     business: { 
                         select: { ownerId: true } 
