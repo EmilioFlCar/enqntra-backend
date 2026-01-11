@@ -10,7 +10,7 @@ import { OwnershipGuard } from "src/common/guards/ownership.guard";
 @Controller('businesses/:businessId/services')
 
 export class BusinessServicesController {
-    constructor(private serviceService: ServiceService) {}
+    constructor(private service: ServiceService) {}
 
     @Post()
     @Ownership('business')
@@ -20,13 +20,13 @@ export class BusinessServicesController {
         @Body() dto: CreateBusinessServiceDto,
         @CurrentUser() user: UserPayload
     ) { 
-        return this.serviceService.create(dto, businessId);
+        return this.service.create(dto, businessId);
     }
 
     @Get()
     findByBusiness(
         @Param('businessId') businessId: string
     ) {
-        return this.serviceService.findByBusiness(businessId);
+        return this.service.findByBusiness(businessId);
     }
 }

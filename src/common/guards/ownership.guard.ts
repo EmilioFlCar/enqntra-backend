@@ -42,6 +42,21 @@ export class OwnershipGuard implements CanActivate {
             ownerId = service?.business?.ownerId ?? null;
         }
 
+        if(resource === 'appointment'){
+            const appointment = await this.prisma.appointment.findUnique({
+                where: { id: request.params.id },
+                select: {
+                    business: { 
+                        select: { ownerId: true } 
+                    },
+                },
+            });
+
+            if(!appointment) throw new NotFoundException('Resource not found');
+
+            ownerId = appointment?.business?.ownerId ?? null;
+        }
+
         if (ownerId !== userId) {
             throw new ForbiddenException('You do not own this resource');
         }
