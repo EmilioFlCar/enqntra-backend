@@ -44,7 +44,7 @@ model Service {
   id          String  @id @default(uuid()) @db.Uuid
   name        String
   description String?
-  durationMin Int
+  durationMinutes  Int
   price       Float?
 
   businessId   String        @db.Uuid
@@ -73,17 +73,21 @@ model Schedule {
   dayOfWeek Int // 0 = domingo, 6 = sábado
   openTime  String // "08:00"
   closeTime String // "18:00"
+  isActive  Boolean @default(true)
 
   businessId String   @db.Uuid
   business   Business @relation(fields: [businessId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([businessId, dayOfWeek])
 }
 
 model Appointment {
   id     String            @id @default(uuid()) @db.Uuid
-  date   DateTime
+  startAt DateTime
+  endAt   DateTime
   status AppointmentStatus @default(PENDING)
 
   userId String @db.Uuid
@@ -97,6 +101,9 @@ model Appointment {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([businessId, startAt, endAt])
+  @@index([userId])
 }
 
 enum Role {

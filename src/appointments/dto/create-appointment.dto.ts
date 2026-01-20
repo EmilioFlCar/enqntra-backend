@@ -1,13 +1,16 @@
-import { IsDate, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsDate, IsUUID } from "class-validator";
 
 export class CreateAppointmentDto {
     
-    @IsString()
+    @IsUUID()
     serviceId: string;
     
-    @IsString()
+    @IsUUID()
     businessId: string;
     
     @IsDate()
-    date: Date;
+    @Type(() => Date)
+    startAt: Date;
+    
 }

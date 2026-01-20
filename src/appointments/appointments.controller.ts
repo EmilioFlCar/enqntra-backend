@@ -26,7 +26,7 @@ export class AppointmentsController {
     getByUser(
         @CurrentUser() user: UserPayload
     ){
-        return this.appointmentsService.GetAppointmentsByUser(user.id);
+        return this.appointmentsService.getAppointmentsByUser(user.id);
     }
 
     @Patch(':id/cancel')

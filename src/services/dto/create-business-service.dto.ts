@@ -10,7 +10,7 @@ export class CreateBusinessServiceDto {
 
         @IsInt()
         @IsPositive()
-        durationMin: number;
+        durationMinutes: number;
 
         @IsNumber()
         @IsPositive()

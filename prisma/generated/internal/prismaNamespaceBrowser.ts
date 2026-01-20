@@ -107,7 +107,7 @@ export const ServiceScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
-  durationMin: 'durationMin',
+  durationMinutes: 'durationMinutes',
   price: 'price',
   businessId: 'businessId'
 } as const
@@ -136,6 +136,7 @@ export const ScheduleScalarFieldEnum = {
   dayOfWeek: 'dayOfWeek',
   openTime: 'openTime',
   closeTime: 'closeTime',
+  isActive: 'isActive',
   businessId: 'businessId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -146,7 +147,8 @@ export type ScheduleScalarFieldEnum = (typeof ScheduleScalarFieldEnum)[keyof typ
 
 export const AppointmentScalarFieldEnum = {
   id: 'id',
-  date: 'date',
+  startAt: 'startAt',
+  endAt: 'endAt',
   status: 'status',
   userId: 'userId',
   businessId: 'businessId',

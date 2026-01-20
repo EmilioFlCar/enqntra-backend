@@ -8,10 +8,11 @@ import { RolesGuard } from './common/guards/roles.guard.js';
 import { ServiceModule } from './services/services.module.js';
 import { BusinessModule } from './businesses/businesses.module.js';
 import { AppointmentsModule } from './appointments/appointments.module';
+import { SchedulesModule } from './schedules/schedules.module';
 
 
 @Module({
-  imports: [UserModule, AuthModule, BusinessModule, ServiceModule, AppointmentsModule],
+  imports: [UserModule, AuthModule, BusinessModule, ServiceModule, AppointmentsModule, SchedulesModule],
   providers: [
     PrismaService, 
     {

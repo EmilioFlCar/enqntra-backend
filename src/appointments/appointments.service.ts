@@ -7,13 +7,27 @@ import { Role } from 'prisma/generated/enums';
 export class AppointmentsService {
     constructor(private prisma: PrismaService) { }
 
-    createAppointment(
+    async createAppointment(
             dto: CreateAppointmentDto,
             userId: string,
     ){
-        return this.prisma.appointment.create({
+        const service = await this.prisma.service.findUnique({
+            where: { 
+                id: dto.serviceId,
+                businessId: dto.businessId,
+            },
+        });
+        if (!service) {
+            throw new NotFoundException('Servicio no encontrado para el negocio especificado.');
+        }
+        
+        const startAt = new Date(dto.startAt);
+        const endAt = new Date(startAt.getTime() + service.durationMinutes * 60000);
+
+        return await this.prisma.appointment.create({
             data: {
-                date: dto.date,
+                startAt,
+                endAt,
                 service: { connect: { id: dto.serviceId } },
                 business: { connect: { id: dto.businessId } },
                 user: { connect: { id: userId } },
@@ -21,7 +35,7 @@ export class AppointmentsService {
         });
     }
 
-    GetAppointmentsByUser(userId: string) {
+    getAppointmentsByUser(userId: string) {
         return this.prisma.appointment.findMany({
             where: { userId: userId },
             include: {
