@@ -2,10 +2,11 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { Role } from 'prisma/generated/enums';
+import { AvailabilityService } from 'src/availability/availability.service';
 
 @Injectable()
 export class AppointmentsService {
-    constructor(private prisma: PrismaService) { }
+    constructor(private prisma: PrismaService, private avialabilityService: AvailabilityService) { }
 
     async createAppointment(
             dto: CreateAppointmentDto,
@@ -23,6 +24,14 @@ export class AppointmentsService {
         
         const startAt = new Date(dto.startAt);
         const endAt = new Date(startAt.getTime() + service.durationMinutes * 60000);
+
+        const appointments = await this.avialabilityService.getAppointmentsForDate(
+            dto.businessId, 
+            startAt.toISOString().split('T')[0]);
+
+        if(this.avialabilityService.isOverlapping(startAt, endAt, appointments)){
+            throw new NotFoundException('El horario seleccionado no está disponible.');
+        }
 
         return await this.prisma.appointment.create({
             data: {
