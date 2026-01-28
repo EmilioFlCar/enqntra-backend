@@ -10,10 +10,11 @@ import { BusinessModule } from './businesses/businesses.module.js';
 import { AppointmentsModule } from './appointments/appointments.module';
 import { SchedulesModule } from './schedules/schedules.module';
 import { AvailabilityModule } from './availability/availability.module.js';
+import { AmenitiesModule } from './amenities/amenities.module';
 
 
 @Module({
-  imports: [UserModule, AuthModule, BusinessModule, ServiceModule, AppointmentsModule, SchedulesModule, AvailabilityModule],
+  imports: [UserModule, AuthModule, BusinessModule, ServiceModule, AppointmentsModule, SchedulesModule, AvailabilityModule, AmenitiesModule],
   providers: [
     PrismaService, 
     {
