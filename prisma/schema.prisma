@@ -90,14 +90,19 @@ model Appointment {
   endAt   DateTime
   status AppointmentStatus @default(PENDING)
 
-  userId String @db.Uuid
-  user   User   @relation(fields: [userId], references: [id])
+  userId String? @db.Uuid
+  user   User?   @relation(fields: [userId], references: [id])
 
   businessId String   @db.Uuid
   business   Business @relation(fields: [businessId], references: [id])
 
   serviceId String  @db.Uuid
   service   Service @relation(fields: [serviceId], references: [id])
+
+// Public client details
+  clientName  String?
+  clientPhone String?
+  clientEmail String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
