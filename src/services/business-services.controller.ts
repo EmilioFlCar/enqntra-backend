@@ -3,7 +3,6 @@ import { ServiceService } from "./services.service";
 import { CreateBusinessServiceDto } from "./dto/create-business-service.dto";
 import { CurrentUser } from "src/common/decorators/current-user.decorator";
 import { UserPayload } from "src/common/types/user-payload";
-import { JwtAuthGuard } from "src/common/guards/jwt-auth.guard";
 import { Ownership } from "src/common/decorators/ownership.decorator";
 import { OwnershipGuard } from "src/common/guards/ownership.guard";
 
@@ -14,7 +13,7 @@ export class BusinessServicesController {
 
     @Post()
     @Ownership('business')
-    @UseGuards(JwtAuthGuard, OwnershipGuard)
+    @UseGuards(OwnershipGuard)
     create(
         @Param('businessId') businessId: string,
         @Body() dto: CreateBusinessServiceDto,

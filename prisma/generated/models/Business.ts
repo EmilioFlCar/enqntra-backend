@@ -458,10 +458,6 @@ export type BusinessUncheckedUpdateManyWithoutOwnerNestedInput = {
   deleteMany?: Prisma.BusinessScalarWhereInput | Prisma.BusinessScalarWhereInput[]
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type BusinessCreateNestedOneWithoutServicesInput = {
   create?: Prisma.XOR<Prisma.BusinessCreateWithoutServicesInput, Prisma.BusinessUncheckedCreateWithoutServicesInput>
   connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutServicesInput

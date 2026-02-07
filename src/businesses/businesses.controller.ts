@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Param, Post, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { BusinessService } from './businesses.service';
 import { CreateBusinessDto } from './dto/create-business.dto';
-import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { UserPayload } from 'src/common/types/user-payload';
 import { UserService } from 'src/users/users.service';
+import { Public } from 'src/common/decorators/public.decorator';
 
 @Controller('businesses')
 export class BusinessController {
@@ -14,6 +14,7 @@ export class BusinessController {
     ) {}
 
     @Get()
+    @Public()
     getAllBusinesses() {
         return this.businessService.getAllBusinesses();
     }
@@ -24,7 +25,6 @@ export class BusinessController {
     }
 
     @Post()
-    @UseGuards(JwtAuthGuard)
         async  createBusiness(
             @Body() body: CreateBusinessDto, 
             @CurrentUser()user: UserPayload
