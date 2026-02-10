@@ -11,10 +11,11 @@ import { AppointmentsModule } from './appointments/appointments.module';
 import { SchedulesModule } from './schedules/schedules.module';
 import { AvailabilityModule } from './availability/availability.module.js';
 import { AmenitiesModule } from './amenities/amenities.module';
+import { CategoriesModule } from './categories/categories.module';
 import { SupabaseModule } from './supabase/supabase.module.js';
 
 @Module({
-  imports: [SupabaseModule, UserModule, AuthModule, BusinessModule, ServiceModule, AppointmentsModule, SchedulesModule, AvailabilityModule, AmenitiesModule],
+  imports: [SupabaseModule, UserModule, AuthModule, BusinessModule, ServiceModule, AppointmentsModule, SchedulesModule, AvailabilityModule, AmenitiesModule, CategoriesModule],
   providers: [
     PrismaService,
     {
