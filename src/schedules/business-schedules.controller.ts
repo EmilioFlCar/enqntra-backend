@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { SchedulesService } from './schedules.service';
+import { Public } from 'src/common/decorators/public.decorator';
 
 @Controller('businesses/:businessId/schedules')
 export class BusinessSchedulesController {
@@ -21,6 +22,7 @@ export class BusinessSchedulesController {
         return this.scheduleService.updateSchedule(scheduleId, dto);
     }
     
+    @Public()
     @Get()
     getSchedulesByBusiness(
         @Param('businessId') businessId: string

@@ -5,6 +5,7 @@ import { CurrentUser } from "src/common/decorators/current-user.decorator";
 import { UserPayload } from "src/common/types/user-payload";
 import { Ownership } from "src/common/decorators/ownership.decorator";
 import { OwnershipGuard } from "src/common/guards/ownership.guard";
+import { Public } from "src/common/decorators/public.decorator";
 
 @Controller('businesses/:businessId/services')
 
@@ -22,6 +23,7 @@ export class BusinessServicesController {
         return this.service.create(dto, businessId);
     }
 
+    @Public()
     @Get()
     findByBusiness(
         @Param('businessId') businessId: string

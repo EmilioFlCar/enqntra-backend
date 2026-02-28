@@ -23,7 +23,7 @@ model User {
 
 model Business {
   id          String  @id @default(uuid()) @db.Uuid
-  name        String
+  name        String?
   description String?
   address     String?
   phone       String?
@@ -31,8 +31,10 @@ model Business {
   ownerId String @db.Uuid
   owner   User   @relation(fields: [ownerId], references: [id])
 
-  categoryId String?   @db.Uuid
-  category   Category? @relation(fields: [categoryId], references: [id])
+  categories BusinessCategory[]
+
+  onboardingStep        OnboardingStep @default(NOT_STARTED)
+  onboardingCompletedAt DateTime?
 
   services     Service[]
   amenities    BusinessAmenity[]
@@ -44,13 +46,31 @@ model Business {
 }
 
 model Category {
-  id   String @id @default(uuid()) @db.Uuid
-  name String @unique
+  id        String    @id @default(uuid()) @db.Uuid
+  name      String
+  slug      String    @unique @default(cuid())
+  depth     Int       @default(0)
+  parentId  String?   @db.Uuid
+  parent    Category? @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children  Category[] @relation("CategoryHierarchy")
 
-  businesses Business[]
-
+  businesses BusinessCategory[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([parentId])
+  @@unique([parentId, name])
+}
+
+model BusinessCategory {
+  businessId String @db.Uuid
+  categoryId String @db.Uuid
+
+  business Business @relation(fields: [businessId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@id([businessId, categoryId])
+  @@index([categoryId])
 }
 
 model Service {
@@ -124,6 +144,15 @@ model Appointment {
   @@index([userId])
 }
 
+
+enum OnboardingStep {
+  NOT_STARTED
+  CATEGORY
+  BUSINESS_INFO
+  SCHEDULE
+  SERVICES
+  COMPLETED
+}
 
 enum Role {
   ADMIN

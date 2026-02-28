@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { BusinessService } from './businesses.service';
 import { CreateBusinessDto } from './dto/create-business.dto';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
@@ -29,7 +29,7 @@ export class BusinessController {
             @Body() body: CreateBusinessDto, 
             @CurrentUser()user: UserPayload
         ) {
-            const business = await this.businessService.createBusiness(body, user.id);
+            const business = await this.businessService.createBusiness(user.id, body);
             await this.userService.promoteUserToBusiness(user.id);
             return business;
 

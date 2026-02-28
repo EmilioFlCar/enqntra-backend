@@ -2,14 +2,14 @@ import { IsString, IsUUID } from "class-validator";
 
 export class CreateBusinessDto {
     @IsString()
-    name!: string;
+    name: string;
 
     @IsString()
-    description!: string;
+    description?: string;
 
     @IsString()
-    address!: string;
+    address?: string;
 
     @IsString()
-    phone!: string;
+    phone?: string;
 }

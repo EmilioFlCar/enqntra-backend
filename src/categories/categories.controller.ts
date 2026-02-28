@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { CategoriesService } from './categories.service';
+import { CategoriesService, CategoryNode } from './categories.service';
 import { Public } from 'src/common/decorators/public.decorator';
 
 @Controller('categories')
@@ -8,7 +8,8 @@ export class CategoriesController {
 
     @Public()
     @Get()
-    getCategories() {
+    async getCategories(): Promise<CategoryNode[]> {
         return this.categoriesService.getCategories();
     }
+
 }
