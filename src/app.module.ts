@@ -15,7 +15,18 @@ import { CategoriesModule } from './categories/categories.module';
 import { SupabaseModule } from './supabase/supabase.module.js';
 
 @Module({
-  imports: [SupabaseModule, UserModule, AuthModule, BusinessModule, ServiceModule, AppointmentsModule, SchedulesModule, AvailabilityModule, AmenitiesModule, CategoriesModule],
+  imports: [
+    SupabaseModule,
+    UserModule,
+    AuthModule,
+    BusinessModule,
+    ServiceModule,
+    AppointmentsModule,
+    SchedulesModule,
+    AvailabilityModule,
+    AmenitiesModule,
+    CategoriesModule,
+  ],
   providers: [
     PrismaService,
     {

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { BusinessService } from './businesses.service';
 import { CreateBusinessDto } from './dto/create-business.dto';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
@@ -8,32 +8,34 @@ import { Public } from 'src/common/decorators/public.decorator';
 
 @Controller('businesses')
 export class BusinessController {
-    constructor(
-        private businessService: BusinessService,
-        private userService: UserService,
-    ) {}
+  constructor(
+    private businessService: BusinessService,
+    private userService: UserService,
+  ) {}
 
-    @Get()
-    @Public()
-    getAllBusinesses() {
-        return this.businessService.getAllBusinesses();
-    }
+  @Get()
+  @Public()
+  getAllBusinesses() {
+    return this.businessService.getAllBusinesses();
+  }
 
-    @Get('/:id')
-    getBusinessById(@Param('id') id: string) {
-        return this.businessService.getBusinessById(id);
-    }
+  @Get('/:id')
+  getBusinessById(@Param('id') id: string) {
+    return this.businessService.getBusinessById(id);
+  }
 
-    @Post()
-        async  createBusiness(
-            @Body() body: CreateBusinessDto, 
-            @CurrentUser()user: UserPayload
-        ) {
-            const business = await this.businessService.createBusiness(user.id, body);
-            await this.userService.promoteUserToBusiness(user.id);
-            return business;
+  @Post()
+  async createBusiness(
+    @Body() body: CreateBusinessDto,
+    @CurrentUser() user: UserPayload,
+  ) {
+    const business = await this.businessService.createBusiness(user.id, body);
+    await this.userService.promoteUserToBusiness(user.id);
+    return business;
+  }
 
-        }
-    
-
+  @Patch('/:id')
+  updateBusiness(@Param('id') id: string, @Body() body: CreateBusinessDto) {
+    return this.businessService.updateBusiness(id, body);
+  }
 }

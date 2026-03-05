@@ -88,6 +88,7 @@ model Service {
 model Amenity {
   id         String            @id @default(uuid()) @db.Uuid
   name       String            @unique
+  slug       String            @unique
   businesses BusinessAmenity[]
 }
 
